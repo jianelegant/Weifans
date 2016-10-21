@@ -5,18 +5,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
+import com.sina.weibo.sdk.net.RequestListener;
+import com.sina.weibo.sdk.openapi.FollowAPI;
+import com.sina.weibo.sdk.openapi.UsersAPI;
+import com.sina.weibo.sdk.openapi.models.User;
+import com.torv.adam.commonlibs.L;
 import com.torv.adam.weifans.util.Constant;
-import com.torv.adam.weifans.util.L;
+import com.torv.adam.weifans.weibo.AccessTokenKeeper;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = "fuckweibo";
 
     private AuthInfo mAuthInfo;
 
@@ -30,19 +38,67 @@ public class MainActivity extends AppCompatActivity {
      */
     private SsoHandler mSsoHandler;
 
+    private Button mAuthBtn;
+    private SimpleDraweeView mProfileView;
+    private TextView mNameView;
+    private Button mFollowBtn;
+
+    UsersAPI mUsersAPI;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        L.d("Lifecycle");
+        L.d(TAG, "Lifecycle");
 
         mAuthInfo = new AuthInfo(this, Constant.APP_KEY, Constant.REDIRECT_URL, Constant.SCOPE);
         mSsoHandler = new SsoHandler(MainActivity.this, mAuthInfo);
 
-        findViewById(R.id.id_auth_btn).setOnClickListener(new View.OnClickListener() {
+        mAuthBtn = (Button) findViewById(R.id.id_auth_btn);
+        mProfileView = (SimpleDraweeView) findViewById(R.id.id_profile_view);
+        mNameView = (TextView) findViewById(R.id.id_name_view);
+        mFollowBtn = (Button) findViewById(R.id.id_follow_btn);
+
+        mAccessToken = AccessTokenKeeper.getToken();
+        if(mAccessToken.isSessionValid()) {
+            mAuthBtn.setVisibility(View.GONE);
+            mUsersAPI = new UsersAPI(this, Constant.APP_KEY, mAccessToken);
+            L.d(TAG, "uid = " + mAccessToken.getUid());
+            mUsersAPI.show(Long.parseLong(mAccessToken.getUid()), mUserInfoRequestListener);
+        }else {
+            mAuthBtn.setVisibility(View.VISIBLE);
+        }
+        mAuthBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mSsoHandler.authorize(new AuthListener());
+            }
+        });
+
+        mFollowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FollowAPI followAPI = new FollowAPI(MainActivity.this, Constant.APP_KEY, mAccessToken);
+                followAPI.follow("1776845763", new RequestListener() {
+                    @Override
+                    public void onComplete(String s) {
+                        L.d(TAG, s);
+                        if(!TextUtils.isEmpty(s)) {
+                            User user = User.parse(s);
+                            if(user != null) {
+                                mNameView.setText(user.screen_name);
+                                mProfileView.setImageURI(user.profile_image_url);
+                            } else {
+                                L.e(TAG, "user is null");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onWeiboException(WeiboException e) {
+                        L.e(TAG, e.getMessage());
+                    }
+                });
             }
         });
     }
@@ -68,7 +124,9 @@ public class MainActivity extends AppCompatActivity {
 //                updateTokenView(false);
 
                 // 保存 Token 到 SharedPreferences
-//                AccessTokenKeeper.writeAccessToken(WBAuthActivity.this, mAccessToken);
+                AccessTokenKeeper.writeAccessToken(MainActivity.this, mAccessToken);
+                mUsersAPI = new UsersAPI(MainActivity.this, Constant.APP_KEY, mAccessToken);
+                mUsersAPI.show(Long.parseLong(mAccessToken.getUid()), mUserInfoRequestListener);
 //                Toast.makeText(MainActivity.this,
 //                        "get token,"+phoneNum, Toast.LENGTH_SHORT).show();
             } else {
@@ -99,6 +157,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        L.d("" + data);
+        L.d(TAG, "" + data);
     }
+
+    private RequestListener mUserInfoRequestListener = new RequestListener() {
+        @Override
+        public void onComplete(String s) {
+            L.d(TAG, s);
+            if(!TextUtils.isEmpty(s)) {
+                User user = User.parse(s);
+                if(user != null) {
+                    mNameView.setText(user.screen_name);
+                    mProfileView.setImageURI(user.profile_image_url);
+                } else {
+                    L.e(TAG, "user is null");
+                }
+            }
+        }
+
+        @Override
+        public void onWeiboException(WeiboException e) {
+            L.e(TAG, e.getMessage());
+        }
+    };
 }

@@ -1,4 +1,4 @@
-package com.torv.adam.weifans.util;
+package com.torv.adam.commonlibs;
 
 public class L {
 
@@ -102,11 +102,9 @@ public class L {
     }
 
     public static void e(String message) {
-        if (isDebug) {
-            StackTraceElement stack[] = Thread.currentThread().getStackTrace();
-            message = stack[3].getClassName() + "." + stack[3].getMethodName() + "()<" + stack[3].getLineNumber() + "> : " + message;
+        StackTraceElement stack[] = Thread.currentThread().getStackTrace();
+        message = stack[3].getClassName() + "." + stack[3].getMethodName() + "()<" + stack[3].getLineNumber() + "> : " + message;
 
-            android.util.Log.e(DEFAULT_TAG, message);
-        }
+        android.util.Log.e(DEFAULT_TAG, message);
     }
 }

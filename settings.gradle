@@ -1,2 +1,2 @@
-include ':WeifansClient'
+include ':WeifansClient', ':Commonlibs'
 include ':weiboSDK'
