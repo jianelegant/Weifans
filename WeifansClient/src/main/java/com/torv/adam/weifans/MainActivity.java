@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FollowAPI followAPI = new FollowAPI(MainActivity.this, Constant.APP_KEY, mAccessToken);
-                followAPI.follow("1776845763", new RequestListener() {
+                followAPI.follow("1712539910", new RequestListener() {
                     @Override
                     public void onComplete(String s) {
                         L.d(TAG, s);
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onWeiboException(WeiboException e) {
-            L.d(TAG, "onWeiboException");
+            L.d(TAG, e.getMessage());
         }
     }
 
