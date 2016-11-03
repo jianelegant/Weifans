@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.torv.adam.commonlibs.L;
+import com.torv.adam.so.Secure;
+import com.torv.adam.weifans.util.Constant;
 import com.torv.adam.weifans.weibo.AccessTokenKeeper;
 
 /**
@@ -19,5 +21,12 @@ public class MainApplication extends Application{
 
         Fresco.initialize(this);
         AccessTokenKeeper.readAccessToken(this);
+        initKey();
+    }
+
+    private void initKey() {
+        Secure secure = new Secure();
+        Constant.APP_KEY = secure.getAppKey();
+        Constant.REDIRECT_URL = secure.getRedirectUrl();
     }
 }
