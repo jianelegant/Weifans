@@ -1,15 +1,16 @@
-package com.sina.weibo.sdk.openapi;
+package com.sina.weibo.sdk.openapi.iapi;
 
 import android.content.Context;
 
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.net.WeiboParameters;
+import com.sina.weibo.sdk.openapi.AbsOpenAPI;
 
 /**
  * Created by AdamLi on 2016/10/21.
  */
-public class FollowAPI extends AbsOpenAPI{
+public class FollowAPI extends AbsOpenAPI {
 
     private static final String API_URL = API_SERVER + "/friendships/create.json";
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="5dp"
+        android:layout_margin="9dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp">
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/id_header"
+                android:layout_width="30dp"
+                fresco:roundAsCircle="true"
+                android:layout_height="30dp" />
+
+            <TextView
+                android:id="@+id/id_name"
+                android:layout_toRightOf="@id/id_header"
+                android:layout_marginLeft="9dp"
+                android:textSize="13dp"
+                android:text="Name"
+                android:textColor="#000000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/id_time"
+                android:layout_toRightOf="@id/id_header"
+                android:layout_marginLeft="9dp"
+                android:layout_below="@id/id_name"
+                android:text="12:44"
+                android:textSize="11dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/id_status"
+                android:layout_below="@id/id_header"
+                android:layout_margin="3dp"
+                android:text="Status Status Status Status Status Status Status Status Status Status Status Status Status Status Status Status Status Status Status Status Status Status Status Status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

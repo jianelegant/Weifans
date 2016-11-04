@@ -26,6 +26,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".StatusListActivity" />
+        <activity android:name=".TrendsAcitivity" />
+
         <!-- Weibo sdk -->
         <activity android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
