@@ -25,8 +25,12 @@ public class MainApplication extends Application{
     }
 
     private void initKey() {
-        Secure secure = new Secure();
-        Constant.APP_KEY = secure.getAppKey();
-        Constant.REDIRECT_URL = secure.getRedirectUrl();
+        try {
+            Secure secure = new Secure();
+            Constant.APP_KEY = secure.getAppKey();
+            Constant.REDIRECT_URL = secure.getRedirectUrl();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
