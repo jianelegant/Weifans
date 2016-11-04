@@ -64,8 +64,7 @@ public class MainActivity extends AppCompatActivity {
 //            mUsersAPI = new UsersAPI(this, Constant.APP_KEY, mAccessToken);
 //            L.d(TAG, "uid = " + mAccessToken.getUid());
 //            mUsersAPI.show(Long.parseLong(mAccessToken.getUid()), mUserInfoRequestListener);
-            startActivity(new Intent(MainActivity.this, TrendsAcitivity.class));
-            finish();
+            letsGo();
         }else {
             mAuthBtn.setVisibility(View.VISIBLE);
         }
@@ -104,6 +103,11 @@ public class MainActivity extends AppCompatActivity {
 //        });
     }
 
+    private void letsGo() {
+        startActivity(new Intent(MainActivity.this, NaviActivity.class));
+        finish();
+    }
+
     /**
      * 微博认证授权回调类。
      * 1. SSO 授权时，需要在 {@link #onActivityResult} 中调用 {@link SsoHandler#authorizeCallBack} 后，
@@ -126,8 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // 保存 Token 到 SharedPreferences
                 AccessTokenKeeper.writeAccessToken(MainActivity.this, mAccessToken);
-                startActivity(new Intent(MainActivity.this, StatusListActivity.class));
-                finish();
+                letsGo();
 //                mUsersAPI = new UsersAPI(MainActivity.this, Constant.APP_KEY, mAccessToken);
 //                mUsersAPI.show(Long.parseLong(mAccessToken.getUid()), mUserInfoRequestListener);
 //                Toast.makeText(MainActivity.this,

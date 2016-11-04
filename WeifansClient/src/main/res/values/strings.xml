@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">真人互粉</string>
+    <string name="app_name">热门话题</string>
+
+    <string name="topic_mine">我的话题</string>
+    <string name="topic_hour">一小时内热门话题</string>
+    <string name="topic_day">一天内热门话题</string>
+    <string name="topic_week">一周内热门话题</string>
 </resources>

@@ -28,6 +28,7 @@
 
         <activity android:name=".StatusListActivity" />
         <activity android:name=".TrendsAcitivity" />
+        <activity android:name=".NaviActivity" />
 
         <!-- Weibo sdk -->
         <activity android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"

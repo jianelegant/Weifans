@@ -33,6 +33,8 @@ public class TrendsAcitivity extends Activity{
     RecyclerView mRecyclerView;
     TrendsAdapter mAdapter;
 
+    TextView mTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +45,35 @@ public class TrendsAcitivity extends Activity{
         mAdapter = new TrendsAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
-        Oauth2AccessToken token = AccessTokenKeeper.getToken();
-        new TrendsAPI(TrendsAcitivity.this, Constant.APP_KEY, token).hourly(true, mTrendsRequestListener);
+        mTitle = (TextView) findViewById(R.id.id_title_text);
+
+        Intent intent = getIntent();
+        if(intent != null) {
+            int type = intent.getIntExtra(NaviActivity.TOPIC_KEY, NaviActivity.TOPIC_HOUR);
+            Oauth2AccessToken token = AccessTokenKeeper.getToken();
+            switch (type){
+                case NaviActivity.TOPIC_MINE:
+                    new TrendsAPI(TrendsAcitivity.this, Constant.APP_KEY, token).trends(Long.parseLong(token.getUid()), 10, 1, mTrendsRequestListener);
+                    mTitle.setText(R.string.topic_mine);
+                    break;
+                case NaviActivity.TOPIC_HOUR:
+                    new TrendsAPI(TrendsAcitivity.this, Constant.APP_KEY, token).hourly(true, mTrendsRequestListener);
+                    mTitle.setText(R.string.topic_hour);
+                    break;
+                case NaviActivity.TOPIC_DAY:
+                    new TrendsAPI(TrendsAcitivity.this, Constant.APP_KEY, token).daily(true, mTrendsRequestListener);
+                    mTitle.setText(R.string.topic_day);
+                    break;
+                case NaviActivity.TOPIC_WEEK:
+                    new TrendsAPI(TrendsAcitivity.this, Constant.APP_KEY, token).weekly(true, mTrendsRequestListener);
+                    mTitle.setText(R.string.topic_week);
+                    break;
+                default:
+                    new TrendsAPI(TrendsAcitivity.this, Constant.APP_KEY, token).hourly(true, mTrendsRequestListener);
+                    mTitle.setText(R.string.topic_hour);
+                    break;
+            }
+        }
     }
 
     class TrendsAdapter extends RecyclerView.Adapter<TrendViewHolder> {
